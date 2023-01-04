@@ -4,3 +4,4 @@ main: me.cerial.brawlkits.core.Core
 api-version: 1.17
 authors: [ oCerial ]
 description: A core plugin for BrawlKits.
+prefix: "[Core]"

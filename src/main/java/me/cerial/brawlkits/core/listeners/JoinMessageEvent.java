@@ -16,7 +16,7 @@ public class JoinMessageEvent implements Listener {
 
         // Check if the player has played before
         if (p.hasPlayedBefore()) {
-            e.setJoinMessage(Utils.color("&7[&a&7] &a"+p.getName()+" &7has joined the server."));
+            e.setJoinMessage(Utils.color("&7[&a+&7] &a"+p.getName()+" &7has joined the server."));
         } else {
             ServerDataManager sdm = new ServerDataManager(Core.getInstance());
             int joins = sdm.getConfig().getInt("joins");
