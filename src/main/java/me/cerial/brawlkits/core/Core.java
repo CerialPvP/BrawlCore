@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 public final class Core extends JavaPlugin {
 
-    public static Logger logger = Logger.getLogger("Minecraft");
+    public static Logger logger = getInstance().getLogger();
     public static Core instance = null;
 
     public static Core getInstance() {

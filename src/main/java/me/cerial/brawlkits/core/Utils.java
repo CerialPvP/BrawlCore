@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import java.util.logging.Logger;
 
 public class Utils {
-    public static Logger logger = Logger.getLogger("Minecraft");
+    public static Logger logger = Core.getInstance().getLogger();
 
     // Color text
     public static String color(String message) {
