@@ -1,8 +1,10 @@
 package me.cerial.brawlkits.core;
 
+import me.cerial.brawlkits.core.commands.MessagesCommand;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.reflections.Reflections;
@@ -12,7 +14,7 @@ import java.util.logging.Logger;
 
 public final class Core extends JavaPlugin {
 
-    public static Logger logger = getInstance().getLogger();
+    public static Logger logger = null;
     public static Core instance = null;
 
     public static Core getInstance() {
@@ -34,6 +36,7 @@ public final class Core extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+        logger = this.getLogger();
         logger.info("Starting plugin...");
         instance = this;
 
@@ -68,10 +71,19 @@ public final class Core extends JavaPlugin {
         // Register commands
         logger.info("Registering commands...");
 
-        // Commands go here
+        Utils.addCommand(new MessagesCommand(), "messages");
 
         logger.info("Registered all commands successfully.");
 
+        // Disable Minehut Cosmetics (might be against TOS, if MH is against it, I'll remove it!)
+        logger.info("Disabling MinehutCosmetics...");
+        PluginManager pm = Bukkit.getPluginManager();
+        if (pm.isPluginEnabled("MinehutCosmetics")) {
+            pm.disablePlugin(pm.getPlugin("MinehutCosmetics"));
+            logger.info("Disabled MinehutCosmetics successfully.");
+        } else {
+            logger.warning("Couldn't find MinehutCosmetics!");
+        }
 
         // Register looping events
         logger.info("Registering looping events...");
@@ -84,5 +96,6 @@ public final class Core extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
         instance = null;
+        logger = null;
     }
 }

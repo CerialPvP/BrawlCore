@@ -3,5 +3,33 @@ version: '${version}'
 main: me.cerial.brawlkits.core.Core
 api-version: 1.17
 authors: [ oCerial ]
+softdepend: [ MinehutCosmetics ]
 description: A core plugin for BrawlKits.
-prefix: "[Core]"
+commands:
+  messages:
+    description: Manage the auto broadcast messages.
+
+permissions:
+  core.trainee:
+    default: op
+    description: A permission which grants access to all trainee commands in this plugin.
+
+  core.mod:
+    default: op
+    description: A permission which grants access to all mod commands in this plugin.
+
+  core.smod:
+    default: op
+    description: A permission which grants access to all senior-mod commands in this plugin.
+
+  core.admin:
+    default: op
+    description: A permission which grants access to all admin commands in this plugin.
+
+  core.manager:
+    default: op
+    description: A permission which grants access to all manager commands in this plugin.
+
+  core.owner:
+    default: op
+    description: A permission which grants access to all owner commands in this plugin.
