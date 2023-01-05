@@ -24,7 +24,7 @@ body:
       options:
         - Core (the basic plugin)
         - Discord (manages the Discord bot & linking)
-      validations:
-        required: true
+    validations:
+      required: true
 
 
