@@ -8,7 +8,6 @@ body:
         Please fill this form out honestly and in-depth. 
 
   - type: checkboxes
-    required: true
     id: checklist-1
     attributes:
       label: "Checklist"
@@ -20,9 +19,12 @@ body:
 
   - type: dropdown
     id: plugin
-    required: true
     attributes:
       label: "On which Brawl plugin are you seeing this issue?"
       options:
         - Core (the basic plugin)
         - Discord (manages the Discord bot & linking)
+
+
+  validations:
+    required: true
