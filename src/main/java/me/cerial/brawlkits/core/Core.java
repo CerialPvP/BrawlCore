@@ -1,5 +1,6 @@
 package me.cerial.brawlkits.core;
 
+import me.cerial.brawlkits.core.commands.MCVersionCommand;
 import me.cerial.brawlkits.core.commands.MessagesCommand;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -72,6 +73,7 @@ public final class Core extends JavaPlugin {
         logger.info("Registering commands...");
 
         Utils.addCommand(new MessagesCommand(), "messages");
+        Utils.addCommand(new MCVersionCommand(), "mcversion");
 
         logger.info("Registered all commands successfully.");
 

@@ -45,7 +45,8 @@ public class MessagesCommand implements TabExecutor {
         //-- /messages <add|remove|list> <message> --
         if (command.getName().equalsIgnoreCase("messages")) {
             // Check if player has permission
-            if (sender.hasPermission("core.manager")) {
+            if (!sender.hasPermission("core.manager")) {
+                Utils.message(sender, "&cYou don't have permission to run this command.");
                 return true;
             }
 

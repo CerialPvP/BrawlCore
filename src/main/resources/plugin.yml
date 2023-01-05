@@ -3,11 +3,14 @@ version: '${version}'
 main: me.cerial.brawlkits.core.Core
 api-version: 1.17
 authors: [ oCerial ]
-softdepend: [ MinehutCosmetics ]
+softdepend: [ MinehutCosmetics, MinehutPlugin, ViaVersion, Vault ]
 description: A core plugin for BrawlKits.
 commands:
   messages:
     description: Manage the auto broadcast messages.
+  mcversion:
+    description: View a player's Minecraft version.
+    aliases: [mcv]
 
 permissions:
   core.trainee:
