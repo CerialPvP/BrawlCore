@@ -4,7 +4,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Welcome to the BrawlKits bug report section. |
+        Welcome to the BrawlKits bug report section. 
         Please fill this form out honestly and in-depth. 
 
   - type: checkboxes
@@ -24,3 +24,37 @@ body:
       options:
         - Core (the basic plugin)
         - Discord (manages the Discord bot & linking)
+    validations:
+      required: true
+
+  - type: textarea
+    id: bug
+    attributes:
+      label: "What is the bug?"
+      description: "Please elaborate as much as you can for us to patch the bug entirely."
+    validations:
+      required: true
+
+  - type: textarea
+      id: ogstuff
+      attributes:
+        label: "What is supposed to happen?"
+        description: "What do you think was supposed to happen if the bug didn't exist in the first place?"
+      validations:
+        required: true
+
+  - type: textarea
+      id: newstuff
+      attributes:
+        label: "And what instead happens?"
+        description: "What is the so \"unusual\" thing you get instead?"
+      validations:
+        required: true
+
+  - type: textarea
+      id: steps
+      attributes:
+        label: "How to reproduce the bug?"
+        description: "Provide as much details as possible, even the smallest details."
+      validations:
+        required: true
