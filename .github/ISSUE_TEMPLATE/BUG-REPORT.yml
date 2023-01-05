@@ -36,25 +36,25 @@ body:
       required: true
 
   - type: textarea
-      id: ogstuff
-      attributes:
-        label: "What is supposed to happen?"
-        description: "What do you think was supposed to happen if the bug didn't exist in the first place?"
-      validations:
-        required: true
+    id: ogstuff
+    attributes:
+      label: "What is supposed to happen?"
+      description: "What do you think was supposed to happen if the bug didn't exist in the first place?"
+    validations:
+      required: true
 
   - type: textarea
-      id: newstuff
-      attributes:
-        label: "And what instead happens?"
-        description: "What is the so \"unusual\" thing you get instead?"
-      validations:
-        required: true
+    id: newstuff
+    attributes:
+      label: "And what instead happens?"
+      description: "What is the so \"unusual\" thing you get instead?"
+    validations:
+      required: true
 
   - type: textarea
-      id: steps
-      attributes:
-        label: "How to reproduce the bug?"
-        description: "Provide as much details as possible, even the smallest details."
-      validations:
-        required: true
+    id: steps
+    attributes:
+      label: "How to reproduce the bug?"
+      description: "Provide as much details as possible, even the smallest details."
+    validations:
+      required: true
