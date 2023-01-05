@@ -1,0 +1,26 @@
+name: "Bug Report"
+description: "Found a bug on our server? Report it here."
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Welcome to the BrawlKits bug report section. |
+        Please fill this form out honestly and in-depth. 
+
+  - type: checkboxes
+    id: checklist-1
+    attributes:
+      label: "Checklist"
+      options:
+        - label: "The issue is related ONLY to the plugins managed by Cerial (Core and Discord)"
+          required: false
+        - label: "I am NOT reporting an issue already posted here"
+          required: false
+
+  - type: dropdown
+    id: plugin
+    attributes:
+      label: "On which Brawl plugin are you seeing this issue?"
+      options:
+        - Core (the basic plugin)
+        - Discord (manages the Discord bot & linking)
