@@ -22,7 +22,7 @@ public class JoinMessageEvent implements Listener {
             int joins = sdm.getConfig().getInt("joins");
             sdm.getConfig().set("joins", joins + 1);
             sdm.saveConfig();
-            e.setJoinMessage("&7[&b+&7] &b"+p.getName()+" &7has joined the server for the first time. (#"+(joins+1)+")");
+            e.setJoinMessage(Utils.color("&7[&b+&7] &b"+p.getName()+" &7has joined the server for the first time. (#"+(joins+1)+")"));
         }
     }
 }

@@ -2,6 +2,7 @@ package me.cerial.brawlkits.core;
 
 import me.cerial.brawlkits.core.commands.MCVersionCommand;
 import me.cerial.brawlkits.core.commands.MessagesCommand;
+import me.cerial.brawlkits.core.repevents.AutoBroadcast;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -77,6 +78,9 @@ public final class Core extends JavaPlugin {
 
         logger.info("Registered all commands successfully.");
 
+        // Register the data files (which i forgot to do ages ago)
+
+
         // Disable Minehut Cosmetics (might be against TOS, if MH is against it, I'll remove it!)
         logger.info("Disabling MinehutCosmetics...");
         PluginManager pm = Bukkit.getPluginManager();
@@ -89,6 +93,7 @@ public final class Core extends JavaPlugin {
 
         // Register looping events
         logger.info("Registering looping events...");
+        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new AutoBroadcast(), 0L, 100L);// 6000L);
         logger.info("Registered all looping events successfully.");
 
         logger.info("Plugin finished loading.");

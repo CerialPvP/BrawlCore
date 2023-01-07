@@ -2,41 +2,57 @@ package me.cerial.brawlkits.core.commands;
 
 import me.cerial.brawlkits.core.Core;
 import me.cerial.brawlkits.core.Utils;
-import me.cerial.brawlkits.core.datamanagers.MessagesDataManager;
+import me.cerial.brawlkits.core.datamanagers.ServerDataManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class MessagesCommand implements TabExecutor {
 
     private void modMessage(String message, CommandSender sender, String type) {
-        MessagesDataManager data = new MessagesDataManager(Core.getInstance());
-
+        ServerDataManager data = new ServerDataManager(Core.getInstance());
         // Loop through the current messages
         boolean exists = false;
+        int msgIndex = -1;
         for (String msg : data.getConfig().getStringList("messages")) {
+            msgIndex++;
             if (msg.equalsIgnoreCase(message)) {
                 exists = true;
                 break;
             }
         }
 
-        if (exists) {
-            Utils.message(sender, "&cThis message already exists. Try another one, or remove it with /messages remove <your message>.");
-        } else {
-            List<String> messages = data.getConfig().getStringList("messages");
-            if (type.equalsIgnoreCase("add")) {
+        List<String> messages = data.getConfig().getStringList("messages");
+
+
+        if (type.equalsIgnoreCase("add")) {
+            if (exists) {
+                Utils.message(sender, "&cThis message already exists!");
+            } else {
                 messages.add(message);
-                Utils.message(sender, "&aAdded message successfully:\n" +
+                Utils.message(sender, "&aAdded message successfully:\n&r" +
                         message);
-            } else if (type.equalsIgnoreCase("remove")) {
-                messages.remove(message);
-                Utils.message(sender, "&aRemoved message successfully:\n" +
+                data.getConfig().set("messages", messages);
+                data.saveConfig();
+            }
+
+        } else if (type.equalsIgnoreCase("remove")) {
+            if (!exists) {
+                Utils.message(sender, "&cThis message doesn't exist!");
+            } else {
+                messages.remove(msgIndex);
+                Utils.message(sender, "&aRemoved message successfully:\n&r" +
                         message);
+
+                data.getConfig().set("messages", messages);
+                data.saveConfig();
             }
         }
+        
 
     }
 
@@ -57,10 +73,22 @@ public class MessagesCommand implements TabExecutor {
                         args[0].equalsIgnoreCase("remove")
                 ) {
                     if (args.length >= 2) {
-                        modMessage(args[1], sender, args[0]);
+                        List<String> sepMessage = new ArrayList<>();
+                        // Loop through the arguments
+                        // Start in arg1
+                        int index = 1;
+                        for (String larg : args) {
+                            index++;
+                            sepMessage.add(larg);
+                        }
+
+                        // Join the message
+                        String message = String.join(" ", sepMessage);
+
+                        modMessage(message, sender, args[0]);
                     }
                 } else if (args[0].equalsIgnoreCase("list")) {
-                    MessagesDataManager data = new MessagesDataManager(Core.getInstance());
+                    ServerDataManager data = new ServerDataManager(Core.getInstance());
                     Utils.message(sender, "&eList of messages:\n&8&m                                                       ");
                     for (String msg : data.getConfig().getStringList("messages")) {
                         Utils.message(sender, "&7- &r" + msg);
@@ -69,6 +97,9 @@ public class MessagesCommand implements TabExecutor {
                     Utils.message(sender, "&cUnknown paramater for first argument.");
                     Utils.message(sender, "&4Usage: &7&o/messages <add|remove|list> <message>");
                 }
+            } else {
+                Utils.message(sender, "&cNo arguments are set.");
+                Utils.message(sender, "&4Usage: &7&o/messages <add|remove|list> <message>");
             }
         }
 
@@ -77,6 +108,22 @@ public class MessagesCommand implements TabExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        List<String> list = new ArrayList<>();
+        ServerDataManager data = new ServerDataManager(Core.getInstance());
+        if (args.length == 1) {
+            list.add("add");
+            list.add("remove");
+            list.add("list");
+            return list;
+        } else if (args.length == 2) {
+            if (args[0].equalsIgnoreCase("remove")) {
+                list.addAll(data.getConfig().getStringList("messages"));
+                return list;
+            }
+
+            return null;
+        }
+
         return null;
     }
 }

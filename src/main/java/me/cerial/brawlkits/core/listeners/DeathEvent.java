@@ -20,9 +20,13 @@ public class DeathEvent implements Listener {
 
         // Attacker stuff
         Player attacker = e.getEntity().getKiller();
-        assert attacker != null;
-        int kills = data.getConfig().getInt(attacker.getUniqueId() + ".kills");
-        data.getConfig().set(victim.getUniqueId() + ".kills", kills + 1);
-        data.saveConfig();
+        if (attacker != null) {
+            int kills = data.getConfig().getInt(attacker.getUniqueId() + ".kills");
+            data.getConfig().set(victim.getUniqueId() + ".kills", kills + 1);
+            data.saveConfig();
+        }
+
+
+
     }
 }
