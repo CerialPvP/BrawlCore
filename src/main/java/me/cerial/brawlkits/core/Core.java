@@ -2,6 +2,8 @@ package me.cerial.brawlkits.core;
 
 import me.cerial.brawlkits.core.commands.MCVersionCommand;
 import me.cerial.brawlkits.core.commands.MessagesCommand;
+import me.cerial.brawlkits.core.commands.SetSpawnCommand;
+import me.cerial.brawlkits.core.commands.SpawnCommand;
 import me.cerial.brawlkits.core.repevents.AutoBroadcast;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -33,6 +35,10 @@ public final class Core extends JavaPlugin {
 
         econ = rsp.getProvider();
         return econ != null;
+    }
+
+    public static Economy getEcon() {
+        return econ;
     }
 
     @Override
@@ -75,6 +81,8 @@ public final class Core extends JavaPlugin {
 
         Utils.addCommand(new MessagesCommand(), "messages");
         Utils.addCommand(new MCVersionCommand(), "mcversion");
+        Utils.addCommand(new SetSpawnCommand(), "setspawn");
+        Utils.addCommand(new SpawnCommand(), "spawn");
 
         logger.info("Registered all commands successfully.");
 
@@ -93,7 +101,7 @@ public final class Core extends JavaPlugin {
 
         // Register looping events
         logger.info("Registering looping events...");
-        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new AutoBroadcast(), 0L, 100L);// 6000L);
+        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new AutoBroadcast(), 0L, 6000L);
         logger.info("Registered all looping events successfully.");
 
         logger.info("Plugin finished loading.");
@@ -104,5 +112,6 @@ public final class Core extends JavaPlugin {
         // Plugin shutdown logic
         instance = null;
         logger = null;
+        econ = null;
     }
 }

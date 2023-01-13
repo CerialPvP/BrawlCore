@@ -11,6 +11,10 @@ commands:
   mcversion:
     description: View a player's Minecraft version.
     aliases: [mcv]
+  setspawn:
+    description: Sets the spawn of the server.
+  spawn:
+    description: Teleports you (or another player) to spawn.
 
 permissions:
   core.trainee:
@@ -36,3 +40,7 @@ permissions:
   core.owner:
     default: op
     description: A permission which grants access to all owner commands in this plugin.
+
+  core.whitechat:
+    default: op
+    description: A permission which gives the player who has it white chat.

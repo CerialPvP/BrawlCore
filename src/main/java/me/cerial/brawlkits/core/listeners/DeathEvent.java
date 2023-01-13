@@ -1,7 +1,9 @@
 package me.cerial.brawlkits.core.listeners;
 
 import me.cerial.brawlkits.core.Core;
+import me.cerial.brawlkits.core.Utils;
 import me.cerial.brawlkits.core.datamanagers.StatsDataManager;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,9 +26,11 @@ public class DeathEvent implements Listener {
             int kills = data.getConfig().getInt(attacker.getUniqueId() + ".kills");
             data.getConfig().set(victim.getUniqueId() + ".kills", kills + 1);
             data.saveConfig();
+
+            // Give the attacker some cash
+            int money = Utils.randomNumber(5, 20);
+            Core.getEcon().depositPlayer(attacker, money);
+            Utils.message(attacker, "&7You have been given &a$"+money+" &7for killing &4"+victim.getName()+"&7.");
         }
-
-
-
     }
 }
