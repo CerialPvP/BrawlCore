@@ -4,6 +4,8 @@ import me.cerial.brawlkits.core.commands.*;
 import me.cerial.brawlkits.core.repevents.AutoBroadcast;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -74,18 +76,44 @@ public final class Core extends JavaPlugin {
         logger.info("Listener registration finished.");
 
         // Register commands
-        logger.info("Registering commands...");
+        logger.info("Registering commands (without tab completion)...");
 
-        Utils.addCommand(new MessagesCommand(), "messages");
-        Utils.addCommand(new MCVersionCommand(), "mcversion");
-        Utils.addCommand(new SetSpawnCommand(), "setspawn");
-        Utils.addCommand(new SpawnCommand(), "spawn");
-        Utils.addCommand(new FreezeCommand(), "freeze");
-        Utils.addCommand(new DiscordCommand(), "discord");
+        // my attempt at automatic command registration
 
-        logger.info("Registered all commands successfully.");
+        for (Class<?> clazz : new Reflections(packageName + ".commands").getSubTypesOf(CommandExecutor.class)) {
+            try {
+                CommandExecutor listener = (CommandExecutor) clazz.getDeclaredConstructor().newInstance();
+                // Get the name
+                String cmdName = ((listener.getClass().getSimpleName()).replace("Command", "")).toLowerCase();
 
-        // Register the data files (which i forgot to do ages ago)
+                Utils.addCommand(listener, cmdName);
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                     NoSuchMethodException e) {
+                logger.warning("An error occurred whilst registering a command:");
+                e.printStackTrace();
+            }
+        }
+
+        logger.info("Registered all commands (without tab completion) successfully.");
+
+        // Register commands with tab completion
+        logger.info("Registering commands (with tab completion)...");
+
+        for (Class<?> clazz : new Reflections(packageName + ".commands").getSubTypesOf(TabExecutor.class)) {
+            try {
+                TabExecutor listener = (TabExecutor) clazz.getDeclaredConstructor().newInstance();
+                // Get the name
+                String cmdName = ((listener.getClass().getSimpleName()).replace("Command", "")).toLowerCase();
+
+                Utils.addCommand(listener, cmdName);
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                     NoSuchMethodException e) {
+                logger.warning("An error occurred whilst registering a command:");
+                e.printStackTrace();
+            }
+        }
+
+        logger.info("Registered all commands (with tab completion) successfully.");
 
 
         // Disable Minehut Cosmetics (might be against TOS, if MH is against it, I'll remove it!)
