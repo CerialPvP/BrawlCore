@@ -26,10 +26,11 @@ public class FreezeCommand implements CommandExecutor {
                 if (p != null) {
                     ServerDataManager data = new ServerDataManager(Core.getInstance());
                     boolean isFrozen = data.getConfig().getBoolean("players." + p.getUniqueId() + ".frozen");
-                    if (isFrozen) {
+                    if (!isFrozen) {
                         data.getConfig().set("players." + p.getUniqueId() + ".frozen", true);
+                        data.saveConfig();
 
-                        Bukkit.broadcast("&4&lBrawl&c&lKits &8> &4" + sender.getName() + " &7has frozen &c" + p.getName() + "&7.", "core.trainee");
+                        Bukkit.broadcast(Utils.color("&4&lBrawl&c&lKits &8> &4" + sender.getName() + " &7has frozen &c" + p.getName() + "&7."), "core.trainee");
 
                         // Send a message to the player
                         Utils.message(p, "&cYou have been frozen!");
@@ -37,8 +38,9 @@ public class FreezeCommand implements CommandExecutor {
                         p.sendMessage(Utils.color("&4Refusing to join in 3 minutes will result in a ban."));
                     } else {
                         data.getConfig().set("players." + p.getUniqueId() + ".frozen", false);
+                        data.saveConfig();
 
-                        Bukkit.broadcast("&4&lBrawl&c&lKits &8> &4" + sender.getName() + " &7has un-frozen &c" + p.getName() + "&7.", "core.trainee");
+                        Bukkit.broadcast(Utils.color("&4&lBrawl&c&lKits &8> &4" + sender.getName() + " &7has un-frozen &c" + p.getName() + "&7."), "core.trainee");
 
                         // Send a message to the player
                         Utils.message(p, "&aYou have been unfrozen. Enjoy playing!");

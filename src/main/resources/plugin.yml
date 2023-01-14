@@ -15,6 +15,10 @@ commands:
     description: Sets the spawn of the server.
   spawn:
     description: Teleports you (or another player) to spawn.
+  freeze:
+    description: Freezes a player for screensharing purposes.
+  discord:
+    description: Get our Discord invite link.
 
 permissions:
   core.trainee:

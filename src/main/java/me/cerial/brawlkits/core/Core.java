@@ -1,9 +1,6 @@
 package me.cerial.brawlkits.core;
 
-import me.cerial.brawlkits.core.commands.MCVersionCommand;
-import me.cerial.brawlkits.core.commands.MessagesCommand;
-import me.cerial.brawlkits.core.commands.SetSpawnCommand;
-import me.cerial.brawlkits.core.commands.SpawnCommand;
+import me.cerial.brawlkits.core.commands.*;
 import me.cerial.brawlkits.core.repevents.AutoBroadcast;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -83,6 +80,8 @@ public final class Core extends JavaPlugin {
         Utils.addCommand(new MCVersionCommand(), "mcversion");
         Utils.addCommand(new SetSpawnCommand(), "setspawn");
         Utils.addCommand(new SpawnCommand(), "spawn");
+        Utils.addCommand(new FreezeCommand(), "freeze");
+        Utils.addCommand(new DiscordCommand(), "discord");
 
         logger.info("Registered all commands successfully.");
 
