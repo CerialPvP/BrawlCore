@@ -19,6 +19,9 @@ commands:
     description: Freezes a player for screensharing purposes.
   discord:
     description: Get our Discord invite link.
+  frozenchat:
+    description: Toggle your frozen chat on or off.
+    aliases: [fc]
 
 permissions:
   core.trainee:
