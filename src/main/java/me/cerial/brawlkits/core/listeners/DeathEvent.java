@@ -3,7 +3,6 @@ package me.cerial.brawlkits.core.listeners;
 import me.cerial.brawlkits.core.Core;
 import me.cerial.brawlkits.core.Utils;
 import me.cerial.brawlkits.core.datamanagers.StatsDataManager;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,6 +13,10 @@ public class DeathEvent implements Listener {
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
         StatsDataManager data = new StatsDataManager(Core.getInstance());
+
+        // Disable XP drops
+        e.setDroppedExp(0);
+        e.setKeepLevel(true);
 
         // Victim stuff
         Player victim = e.getEntity();

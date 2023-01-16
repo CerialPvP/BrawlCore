@@ -21,10 +21,16 @@ repositories {
         url 'https://jitpack.io'
     }
 
+    // ViaVersion
     maven {
-        // btw not sure if this works i am trying stuff
         name = 'viaversion-repo'
         url = 'https://repo.viaversion.com'
+    }
+
+    // InventoryGUI
+    maven {
+        name = 'minebench-repo'
+        url = 'https://repo.minebench.de/'
     }
 }
 
@@ -33,6 +39,7 @@ dependencies {
     implementation 'org.reflections:reflections:0.10.2'
     compileOnly 'com.github.MilkBowl:VaultAPI:1.7'
     compileOnly 'com.viaversion:viaversion-api:4.5.1'
+    compileOnly 'de.themoep:inventorygui:1.6-SNAPSHOT'
 }
 
 def targetJavaVersion = 16
