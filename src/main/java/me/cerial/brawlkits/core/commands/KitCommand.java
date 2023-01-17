@@ -63,20 +63,22 @@ public class KitCommand implements TabExecutor {
 
     private void giveKitItem(Player p, String kit) {
         KitsDataManager data = new KitsDataManager(Core.getInstance());
-        // Getting all enchants, that internal for loop might not be healthy but fuck it :P
-        List<String> enchantmentList = new ArrayList<>(data.getConfig().getStringList("kits."+kit+".enchants"));
-        Map<Enchantment, Integer> enchants = new HashMap<>();
-        for (String loopEnchant : data.getConfig().getStringList("kits."+kit+".enchants")) {
-            // Split the enchants and put them in the map we made
-            String[] splitEnchant = loopEnchant.split(" ");
-            int value = Integer.parseInt(splitEnchant[1]);
-
-            enchants.put(getEnchantment(splitEnchant[0]), value);
-        }
+        
 
         // Get all the items of the kit and loop through them
         List<String> items = new ArrayList<>(data.getConfig().getConfigurationSection("kits."+kit).getKeys(true));
         for (String item : items) {
+            // Getting all enchants, that internal for loop might not be healthy but fuck it :P
+            List<String> enchantmentList = new ArrayList<>(data.getConfig().getStringList("kits."+kit+".enchants"));
+            Map<Enchantment, Integer> enchants = new HashMap<>();
+            for (String loopEnchant : data.getConfig().getStringList(item+".enchants")) {
+                // Split the enchants and put them in the map we made
+                String[] splitEnchant = loopEnchant.split(" ");
+                int value = Integer.parseInt(splitEnchant[1]);
+
+                enchants.put(getEnchantment(splitEnchant[0]), value);
+            }
+            
             // First, get the item as an ItemStack
             Material itemAsMaterial = Material.getMaterial(item);
             assert itemAsMaterial != null;
