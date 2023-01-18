@@ -22,6 +22,15 @@ commands:
   frozenchat:
     description: Toggle your frozen chat on or off.
     aliases: [fc]
+  kit:
+    description: Get a kit for you to fight with.
+    aliases: [kits, kitpvp]
+  createkit:
+    description: Create a new kit with a name and cooldown.
+    aliases: [newkit]
+  deletekit:
+    description: Delete a kit.
+    aliases: [removekit, delkit]
 
 permissions:
   core.trainee:

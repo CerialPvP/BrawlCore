@@ -2,6 +2,7 @@ package me.cerial.brawlkits.core.commands;
 import me.cerial.brawlkits.core.Core;
 import me.cerial.brawlkits.core.Utils;
 import me.cerial.brawlkits.core.datamanagers.KitsDataManager;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -11,10 +12,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class KitCommand implements TabExecutor {
     /** Takes a enchantment name by string and matches
@@ -25,7 +24,7 @@ public class KitCommand implements TabExecutor {
          * @param enchString
          * @return
          */
-    private static Enchantment getEnchantment(String enchString) {
+    protected static Enchantment getEnchantment(String enchString) {
         // Clean up string - make lowercase and strip space/dash/underscore
         enchString = enchString.toLowerCase().replaceAll("[ _-]", "");
  
@@ -63,47 +62,70 @@ public class KitCommand implements TabExecutor {
 
     private void giveKitItem(Player p, String kit) {
         KitsDataManager data = new KitsDataManager(Core.getInstance());
-        
 
-        // Get all the items of the kit and loop through them
-        List<String> items = new ArrayList<>(data.getConfig().getConfigurationSection("kits."+kit).getKeys(true));
-        for (String item : items) {
-            // Getting all enchants, that internal for loop might not be healthy but fuck it :P
-            List<String> enchantmentList = new ArrayList<>(data.getConfig().getStringList("kits."+kit+".enchants"));
-            Map<Enchantment, Integer> enchants = new HashMap<>();
-            for (String loopEnchant : data.getConfig().getStringList(item+".enchants")) {
-                // Split the enchants and put them in the map we made
-                String[] splitEnchant = loopEnchant.split(" ");
-                int value = Integer.parseInt(splitEnchant[1]);
+        // -- Example: item_name 1 name:This_is_a_name protection:1 unbreaking:1 --
 
-                enchants.put(getEnchantment(splitEnchant[0]), value);
+        // Initialized failed item hashmap
+        HashMap<Integer, String> failed = new HashMap<>();
+        int index = -1;
+
+        // We loop through all the kit items
+        for (String item : data.getConfig().getStringList("kits."+kit+".items")) {
+            index++;
+
+            // Split the item string
+            String[] split = item.split(" ");
+
+            // Get the item as an ItemStack
+            Material mprsd = Material.getMaterial(split[0]);
+            if (mprsd == null) {
+                // If the material is null, put the failed item in a map.
+                failed.put(index, split[0]+";Failed to get Material.");
+                continue;
             }
-            
-            // First, get the item as an ItemStack
-            Material itemAsMaterial = Material.getMaterial(item);
-            assert itemAsMaterial != null;
-            ItemStack itemAsStack = new ItemStack(itemAsMaterial);
-            ItemMeta itemAsMeta = itemAsStack.getItemMeta();
 
-            // Second, set the item name
-            assert itemAsMeta != null;
-            itemAsMeta.setDisplayName(data.getConfig().getString(item+".name"));
+            ItemStack prsd = new ItemStack(mprsd);
+            ItemMeta meprsd = prsd.getItemMeta();
+            if (meprsd == null) {
+                // If the meta is null, put the failed item in a map.
+                failed.put(index, split[0]+";Failed to get ItemMeta.");
+                continue;
+            }
 
-            // Third, set the item lore
-            itemAsMeta.setLore(data.getConfig().getStringList(item+".lore"));
+            // Do the stuff I need to do with meta
+            String display = split[2]
+                    .replace("name:", "")
+                    .replaceAll("_", " ");
 
-            // Forth, set the enchants
-            // I'm using unsafe since why the hell not :P
-            itemAsStack.addUnsafeEnchantments(enchants);
+            meprsd.setDisplayName(display);
+            prsd.setAmount(Integer.parseInt(split[1]));
 
-            // Fifth, set the ItemMeta to the ItemStack
-            itemAsStack.setItemMeta(itemAsMeta);
+            // Clone the split array and remove the first 3 keys
+            List<String> cloneSplit = new ArrayList<>(Arrays.stream(split).toList());
 
-            // Sixth, give the player the item
-            p.getInventory().addItem(itemAsStack);
+            for (int i = 0; i < 3; i++) {
+                cloneSplit.remove(0);
+            }
+
+            // Loop through this list
+            for (String ench : cloneSplit) {
+                // Split the enchant key
+                String[] enchSplit = ench.split(":");
+
+                Enchantment enchantment = getEnchantment(enchSplit[0]);
+                int power = Integer.parseInt(enchSplit[1]);
+                assert enchantment != null;
+                meprsd.addEnchant(enchantment, power, false);
+            }
+            // Set the modified item meta to the ItemStack
+            prsd.setItemMeta(meprsd);
+
+            // Give the item to the player
+            p.getInventory().addItem(prsd);
         }
 
-        Utils.message(p, "&7Given kit &c"+kit+"&7.");
+        // Send a message to the player
+        Utils.message(p, "&7Given kit &4"+kit+".");
     }
     
     @Override
@@ -119,20 +141,32 @@ public class KitCommand implements TabExecutor {
             KitsDataManager data = new KitsDataManager(Core.getInstance());
             List<String> kits = new ArrayList<>(data.getConfig().getConfigurationSection("kits").getKeys(false));
 
-            // Check if the argument is one of the kits in the YML
-            boolean exists = false;
-            for (String kit : kits) {
-                if (args[0].equalsIgnoreCase(kit)) {
-                    exists = true;
-                    break;
-                }
+            // Check if there are no kits
+            if (kits.isEmpty()) {
+                Utils.message(p, "&cNo kits have been found in the kit system. Please contact a manager immediately.");
+                return true;
             }
 
-            if (!exists) {
-                Utils.message(p, "&cThe kit \""+args[0]+"\" does not exist.");
-                Utils.message(p, "&6Usage: &7&o/kits <"+(String.join(", ", kits)+">"));
+            // Check if first argument is set
+            if (args.length >= 1) {
+                // Check if the argument is one of the kits in the YML
+                boolean exists = false;
+                for (String kit : kits) {
+                    if (args[0].equalsIgnoreCase(kit)) {
+                        exists = true;
+                        break;
+                    }
+                }
+
+                if (!exists) {
+                    Utils.message(p, "&cThe kit \""+args[0]+"\" does not exist.");
+                    Utils.message(p, "&6Usage: &7&o/kits <"+(String.join(", ", kits)+">"));
+                } else {
+                    giveKitItem(p, args[0]);
+                }
             } else {
-                giveKitItem(p, args[0]);
+                Utils.message(sender, "&cYou did not specify a kit. \n" +
+                        "&6Usage: &7&o/kit <" + (String.join(", ", kits) + ">"));
             }
         }
         
