@@ -26,6 +26,12 @@ public final class Core extends JavaPlugin {
 
     public static Economy econ;
 
+    public static boolean papi_installed = false;
+
+    public static boolean getPapiInstalled() {
+        return papi_installed;
+    }
+
     public boolean setupEconomy() {
         RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
@@ -39,6 +45,9 @@ public final class Core extends JavaPlugin {
     public static Economy getEcon() {
         return econ;
     }
+
+    // In-plugin configuration
+    private boolean whitelistonstartup = true;
 
     @Override
     public void onEnable() {
@@ -124,6 +133,25 @@ public final class Core extends JavaPlugin {
             logger.info("Disabled MinehutCosmetics successfully.");
         } else {
             logger.warning("Couldn't find MinehutCosmetics!");
+        }
+
+        // Check if PlaceholderAPI is installed
+        logger.info("Checking PlaceholderAPI status...");
+        if (pm.isPluginEnabled("PlaceholderAPI")) {
+            papi_installed = true;
+            logger.info("PlaceholderAPI installed and enabled.");
+        } else {
+            logger.warning("PlaceholderAPI not installed or not enabled! Disabling plugin...");
+            pm.disablePlugin(this);
+        }
+
+        // Enable whitelist if in-plugin config says to
+        if (whitelistonstartup) {
+            logger.info("Enabling whitelist...");
+            Bukkit.getServer().setWhitelist(true);
+        } else {
+            logger.info("Disabling whitelist...");
+            Bukkit.getServer().setWhitelist(false);
         }
 
         // Register looping events
