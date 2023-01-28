@@ -126,8 +126,17 @@ public class KitCommand implements TabExecutor {
 
         // Send a message to the player
         Utils.message(p, "&7Given kit &4"+kit+".");
+
+        // Set the cooldown of the kit
+        // -- Example: players.uuid.kit --
+        double cooldown = (data.getConfig().getDouble("kits."+kit+".cooldown") * 1000);
+        Bukkit.broadcastMessage(cooldown + "");
+
+        cooldowns.put(p.getName() + ";" + kit, System.currentTimeMillis());
     }
-    
+
+    private final HashMap<String, Long> cooldowns = new HashMap<>();
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("kit")) {
@@ -162,7 +171,20 @@ public class KitCommand implements TabExecutor {
                     Utils.message(p, "&cThe kit \""+args[0]+"\" does not exist.");
                     Utils.message(p, "&6Usage: &7&o/kits <"+(String.join(", ", kits)+">"));
                 } else {
-                    giveKitItem(p, args[0]);
+                    // -- HashMap: Key = name;kit, Value = Current timestamp in MS --
+
+                    // Check if the user has their key saved in the hashmap
+                    String key = p.getName() + ";" + args[0];
+                    if (cooldowns.containsKey(key)) {
+                        long remaining = System.currentTimeMillis() - cooldowns.get(key);
+                        if (remaining < (data.getConfig().getDouble("kits."+args[0]+".cooldown") * 1000)) {
+                            Utils.message(p, "&cYou cannot use kit \""+args[0]+"\" for another "+Utils.formatTime((long) (((data.getConfig().getDouble("kits."+args[0]+".cooldown") * 1000)-remaining) / 1000))+".");
+                        } else {
+                            giveKitItem(p, args[0]);
+                        }
+                    } else {
+                        giveKitItem(p, args[0]);
+                    }
                 }
             } else {
                 Utils.message(sender, "&cYou did not specify a kit. \n" +

@@ -3,11 +3,13 @@ package me.cerial.brawlkits.core.listeners;
 import me.cerial.brawlkits.core.Core;
 import me.cerial.brawlkits.core.Utils;
 import me.cerial.brawlkits.core.datamanagers.ServerDataManager;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
@@ -57,7 +59,7 @@ public class ChatEvent implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onChat(AsyncPlayerChatEvent e) {
         String format;
         Player p = e.getPlayer();
@@ -91,7 +93,15 @@ public class ChatEvent implements Listener {
             format = Utils.color("&7: " + uncolor(e.getMessage()));
         }
 
+        String tag = PlaceholderAPI.setPlaceholders(p, "%deluxetags_tag%");
+        String fullFormat = "";
+        if (tag.isBlank() || tag.isEmpty()) {
+            fullFormat = Utils.color("&7[&4"+p.getLevel()+"&7] " + p.getDisplayName() + format);
+        } else {
+            fullFormat = Utils.color("&7[&4"+p.getLevel()+"&7] " + tag + " " + p.getDisplayName() + format);
+        }
+
         // Send the message
-        e.setFormat(Utils.color("&7[&4"+p.getLevel()+"&7] " + p.getDisplayName() + format));
+        e.setFormat(fullFormat);
     }
 }

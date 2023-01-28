@@ -22,12 +22,14 @@ public class DeathEvent implements Listener {
         Player victim = e.getEntity();
         int deaths = data.getConfig().getInt(victim.getUniqueId() + ".deaths");
         data.getConfig().set(victim.getUniqueId() + ".deaths", deaths + 1);
+        data.getConfig().set(victim.getUniqueId() + ".killstreak", 0);
 
         // Attacker stuff
         Player attacker = e.getEntity().getKiller();
         if (attacker != null) {
             int kills = data.getConfig().getInt(attacker.getUniqueId() + ".kills");
             data.getConfig().set(victim.getUniqueId() + ".kills", kills + 1);
+            data.getConfig().set(victim.getUniqueId() + ".killstreak", kills + 1);
             data.saveConfig();
 
             // Give the attacker some cash
