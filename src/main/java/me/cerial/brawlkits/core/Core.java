@@ -2,6 +2,8 @@ package me.cerial.brawlkits.core;
 
 import me.cerial.brawlkits.core.commands.*;
 import me.cerial.brawlkits.core.repevents.AutoBroadcast;
+import me.cerial.brawlkits.core.repevents.RepScoreboard;
+import me.cerial.brawlkits.core.repevents.TPSUtil;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -157,6 +159,8 @@ public final class Core extends JavaPlugin {
         // Register looping events
         logger.info("Registering looping events...");
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new AutoBroadcast(), 0L, 6000L);
+        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TPSUtil(), 0L, 20L);
+        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new RepScoreboard(), 0L, 10L);
         logger.info("Registered all looping events successfully.");
 
         logger.info("Plugin finished loading.");

@@ -46,7 +46,6 @@ dependencies {
     compileOnly 'com.viaversion:viaversion-api:4.5.1'
     compileOnly 'me.clip:placeholderapi:2.11.2'
     compileOnly 'com.github.Redempt:RedLib:6.5.8'
-    implementation 'fr.mrmicky:fastboard:1.2.1'
 }
 
 shadowJar {
