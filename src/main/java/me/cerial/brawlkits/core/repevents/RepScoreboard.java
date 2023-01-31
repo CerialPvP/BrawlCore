@@ -3,6 +3,7 @@ package me.cerial.brawlkits.core.repevents;
 import me.cerial.brawlkits.core.Core;
 import me.cerial.brawlkits.core.Utils;
 import me.cerial.brawlkits.core.datamanagers.StatsDataManager;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -42,7 +43,7 @@ public class RepScoreboard implements Runnable {
         scores.put(8, "&2");
         scores.put(7, "&c&lServer");
         scores.put(6, "&7&l\u279C &4&lOnline: &c"+Bukkit.getServer().getOnlinePlayers().size()+"/"+Bukkit.getServer().getMaxPlayers());
-        scores.put(5, "&7&l\u279C &4&lTPS: &c"+Float.parseFloat(df.format((float) ((TPSUtil.getTPS()*100D)/100D))));
+        scores.put(5, "&7&l\u279C &4&lTPS: &c"+ PlaceholderAPI.setPlaceholders(null, "%server_tps_1%"));
         scores.put(4, "&3");
         scores.put(3, "&7&oBrawlKits.minehut.gg");
 
