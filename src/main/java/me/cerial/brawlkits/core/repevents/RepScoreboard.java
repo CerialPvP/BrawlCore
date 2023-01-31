@@ -51,12 +51,9 @@ public class RepScoreboard implements Runnable {
 
     @Override
     public void run() {
-        // Run async task
-        Bukkit.getServer().getScheduler().runTaskAsynchronously(Core.getInstance(), () -> {
-            // Get all the players and apply the scoreboard
-            for (Player pl: Bukkit.getServer().getOnlinePlayers()) {
-                applyBoard(pl);
-            }
-        });
+        // Get all the players and apply the scoreboard (sadly not async since yeah)
+        for (Player pl: Bukkit.getServer().getOnlinePlayers()) {
+            applyBoard(pl);
+        }
     }
 }
