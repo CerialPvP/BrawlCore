@@ -39,6 +39,13 @@ commands:
     description: Create a new kit with a name and cooldown.
     aliases: [ newkit ]
 
+  updatecache:
+    description: Update your own cache data for some commands.
+    aliases: [ updcache ]
+
+  reloadlb:
+    description: Reload all the leaderboards of the server.
+
 permissions:
   core.trainee:
     default: op
