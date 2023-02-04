@@ -1,6 +1,7 @@
 package me.cerial.brawlkits.core.commands;
 
 import me.cerial.brawlkits.core.Core;
+import me.cerial.brawlkits.core.utils.PlayerCachingUtils;
 import me.cerial.brawlkits.core.Utils;
 import me.cerial.brawlkits.core.datamanagers.StatsDataManager;
 import org.bukkit.Bukkit;
@@ -28,23 +29,16 @@ public class StatsCommand implements CommandExecutor {
                 return true;
             }
 
-            Player target = null;
+            OfflinePlayer target = null;
             // -- /stats [player] --
             // Check if first argument is set
             if (args.length >= 1) {
                 Bukkit.broadcastMessage("argument specified, " + args[0]);
-                // Loop through the offline players
-                for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
-                    // Check if the name is the same as ours
-                    if (pl.getName().equalsIgnoreCase(args[0])) {
-                        target = pl;
-                        break;
-                    }
-                }
-
-                if (target == null) {
-                    target = p;
-                    Utils.message(p, "&6That player wasn't online, checking your own stats...");
+                target = PlayerCachingUtils.getPlayerViaName(args[0]);
+                if (target == null ||
+                    !target.hasPlayedBefore()) {
+                    Utils.message(sender, "&cThe player you've entered is invalid.");
+                    return true;
                 }
             }
 
